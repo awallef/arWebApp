@@ -14,7 +14,7 @@
   		<source src = "assets/videos/eca1.mp4" type='video/mp4;'>
   	</video>
 
-    <video id="video2" autoplay muted loop webkit-playsinline style="display:none">
+    <video id="video2" autoplay muted loop >
   		<source src = "assets/videos/eca2.mp4" type='video/mp4;'>
   	</video>
   </div>
@@ -255,14 +255,5 @@
     		requestAnimationFrame( animate );
   	});
   }
-
-  var videoEventHandler = function(evt)
-  {
-    console.log('seeked');
-    //video.style.display = 'none';
-    launchRendering();
-  }
-
-  video.addEventListener('seeked', videoEventHandler);
 
 </script></body>
