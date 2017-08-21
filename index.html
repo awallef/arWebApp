@@ -215,6 +215,7 @@
 	onRenderFcts.push(function(){
   if(smoothedControls._visibleStartedAt) {
       if ( video.readyState === video.HAVE_ENOUGH_DATA ) {
+        document.body.getElementById('video').style.display = 'none';
         imageContext.drawImage( video, 0, 0 );
         if ( texture ) texture.needsUpdate = true;
       };
