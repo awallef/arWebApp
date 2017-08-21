@@ -9,13 +9,19 @@
 
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
 
-  <video id="video" autoplay muted loop >
-		<source src = "assets/videos/eca1.mp4" type='video/mp4;'>
-	</video>
+  <div style="position:absolute; z-index:-10;">
+    <video id="video" autoplay muted loop >
+  		<source src = "assets/videos/eca1.mp4" type='video/mp4;'>
+  	</video>
 
-  <video id="video2" autoplay muted loop webkit-playsinline style="display:none">
-		<source src = "assets/videos/eca2.mp4" type='video/mp4;'>
-	</video>
+    <video id="video2" autoplay muted loop webkit-playsinline style="display:none">
+  		<source src = "assets/videos/eca2.mp4" type='video/mp4;'>
+  	</video>
+  </div>
+
+  <div id="render-zone" style="position:absolute; z-index: 10; width:100%; height:100%;">
+
+  </div>
 
   <script>
 	//////////////////////////////////////////////////////////////////////////////////
@@ -30,10 +36,10 @@
 	renderer.setClearColor(new THREE.Color('lightgrey'), 0)
 	// renderer.setPixelRatio( 1/2 );
 	renderer.setSize( window.innerWidth, window.innerHeight );
-	renderer.domElement.style.position = 'absolute'
-	renderer.domElement.style.top = '0px'
-	renderer.domElement.style.left = '0px'
-	document.body.appendChild( renderer.domElement );
+	renderer.domElement.style.position = 'absolute';
+	renderer.domElement.style.top = '0px';
+	renderer.domElement.style.left = '0px';
+	document.getElementById('render-zone').appendChild( renderer.domElement );
 
 	// array of functions for the rendering loop
 	var onRenderFcts= [];
@@ -253,7 +259,7 @@
   var videoEventHandler = function(evt)
   {
     console.log('seeked');
-    video.style.display = 'none';
+    //video.style.display = 'none';
     launchRendering();
   }
 
