@@ -215,7 +215,6 @@
 	onRenderFcts.push(function(){
   if(smoothedControls._visibleStartedAt) {
       if ( video.readyState === video.HAVE_ENOUGH_DATA ) {
-        document.body.getElementById('video').style.display = 'none';
         imageContext.drawImage( video, 0, 0 );
         if ( texture ) texture.needsUpdate = true;
       };
@@ -233,17 +232,31 @@
 	})
 
 	// run the rendering loop
-	var lastTimeMsec= null
-	requestAnimationFrame(function animate(nowMsec){
-		// measure time
-		lastTimeMsec	= lastTimeMsec || nowMsec-1000/60
-		var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
-		lastTimeMsec	= nowMsec
-		// call each update function
-		onRenderFcts.forEach(function(onRenderFct){
-			onRenderFct(deltaMsec/1000, nowMsec/1000)
-		})
-  		// keep looping
-  		requestAnimationFrame( animate );
-	})
+	var lastTimeMsec= null;
+
+	var launchRendering = function ()
+  {
+    requestAnimationFrame(function animate(nowMsec){
+  		// measure time
+  		lastTimeMsec	= lastTimeMsec || nowMsec-1000/60
+  		var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
+  		lastTimeMsec	= nowMsec
+  		// call each update function
+  		onRenderFcts.forEach(function(onRenderFct){
+  			onRenderFct(deltaMsec/1000, nowMsec/1000)
+  		})
+    		// keep looping
+    		requestAnimationFrame( animate );
+  	});
+  }
+
+  var videoEventHandler = function(evt)
+  {
+    console.log('seeked');
+    video.style.display = 'none';
+    launchRendering();
+  }
+
+  video.addEventListener('seeked', videoEventHandler);
+
 </script></body>
