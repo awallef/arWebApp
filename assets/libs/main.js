@@ -71,8 +71,38 @@
     }
   }
 
-  //add markers
-  var addMarkers = function()
+  //init ArToolkitSource
+  var initSource = function()
+  {
+    arToolkitSource.init(function onReady(){
+      onResize()
+    })
+
+    // handle resize
+    window.addEventListener('resize', function(){
+      onResize()
+    })
+  }
+
+  //init ArToolkitContext
+  var initContext = function()
+  {
+    // initialize it
+    arToolkitContext.init(function onCompleted(){
+      // copy projection matrix to camera
+      camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
+    })
+
+    // update artoolkit on every frame
+    onRenderFcts.push(function(){
+      if( arToolkitSource.ready === false )	return
+
+      arToolkitContext.update( arToolkitSource.domElement )
+    })
+  }
+
+  //add markers and videos on them
+  var addObjects = function()
   {
     for (var i in settings)
     {
@@ -175,7 +205,6 @@
     // init renderer
     initRenderer();
 
-
     //////////////////////////////////////////////////////////////////////////////////
     //		Initialize a basic camera
     //////////////////////////////////////////////////////////////////////////////////
@@ -186,44 +215,26 @@
     //          handle arToolkitSource
     ////////////////////////////////////////////////////////////////////////////////
 
-    arToolkitSource.init(function onReady(){
-      onResize()
-    })
+    initSource();
 
-    // handle resize
-    window.addEventListener('resize', function(){
-      onResize()
-    })
     ////////////////////////////////////////////////////////////////////////////////
     //          initialize arToolkitContext
     ////////////////////////////////////////////////////////////////////////////////
 
-    // initialize it
-    arToolkitContext.init(function onCompleted(){
-      // copy projection matrix to camera
-      camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
-    })
-
-    // update artoolkit on every frame
-    onRenderFcts.push(function(){
-      if( arToolkitSource.ready === false )	return
-
-      arToolkitContext.update( arToolkitSource.domElement )
-    })
+    initContext();
 
     ////////////////////////////////////////////////////////////////////////////////
     //          Create a ArMarkerControls
     ////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////
-    //		add an object in the scene
+    //		      add videos in the scene
     //////////////////////////////////////////////////////////////////////////////////
 
-    addMarkers();
+    addObjects();
 
   //////////////////////////////////////////////////////////////////////////////////
   //		render the whole thing on the page
   //////////////////////////////////////////////////////////////////////////////////
-
 
   launchRendering();
 }
